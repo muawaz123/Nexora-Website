@@ -1,0 +1,1618 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXORA — Modern 3D Technology Agency</title>
+    <meta name="description" content="NEXORA creates immersive digital products, intelligent web experiences, and high-performance 3D technology solutions for ambitious brands.">
+    <!-- Open Graph Metadata -->
+    <meta property="og:title" content="NEXORA — Modern 3D Technology Agency">
+    <meta property="og:description" content="Immersive 3D technology agency delivering next-gen web applications, AI solutions, and digital transformation.">
+    <meta property="og:type" content="website">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            900: '#030712',
+                            800: '#0b0f19',
+                            700: '#111827',
+                            600: '#1f2937',
+                        },
+                        brand: {
+                            cyan: '#06b6d4',
+                            indigo: '#6366f1',
+                            purple: '#a855f7',
+                            pink: '#ec4899',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    animation: {
+                        'pulse-glow': 'pulseGlow 4s infinite alternate',
+                        'float': 'float 6s ease-in-out infinite',
+                        'spin-slow': 'spin 20s linear infinite',
+                        'marquee': 'marquee 25s linear infinite',
+                    },
+                    keyframes: {
+                        pulseGlow: {
+                            '0%': { opacity: '0.3', transform: 'scale(1)' },
+                            '100%': { opacity: '0.7', transform: 'scale(1.05)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-12px)' },
+                        },
+                        marquee: {
+                            '0%': { transform: 'translateX(0%)' },
+                            '100%': { transform: 'translateX(-50%)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Three.js Library CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- Global Custom Styles -->
+    <style>
+        body {
+            background-color: #030712;
+            color: #f3f4f6;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism utility classes */
+        .glass-panel {
+            background: rgba(17, 24, 39, 0.55);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-panel-hover {
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .glass-panel-hover:hover {
+            background: rgba(31, 41, 55, 0.65);
+            border-color: rgba(99, 102, 241, 0.35);
+            box-shadow: 0 10px 30px -10px rgba(99, 102, 241, 0.25);
+            transform: translateY(-4px);
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #ffffff 0%, #a5f3fc 40%, #818cf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .text-gradient-accent {
+            background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Scrollbar styles */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #030712;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1f2937;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #374151;
+        }
+
+        /* Tilt perspective container */
+        .tilt-card {
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        /* Code pre overflow styling */
+        pre code {
+            font-family: 'JetBrains Mono', monospace;
+        }
+    </style>
+</head>
+<body class="antialiased text-gray-200 bg-dark-900 selection:bg-brand-indigo selection:text-white">
+
+    <!-- NAVIGATION HEADER -->
+    <header id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 py-5 px-4 md:px-8">
+        <div class="max-w-7xl mx-auto flex items-center justify-between glass-panel rounded-2xl px-6 py-3 border border-white/10 shadow-2xl">
+            <!-- Brand Logo -->
+            <a href="#home" class="flex items-center gap-3 group">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-indigo via-brand-cyan to-brand-purple flex items-center justify-center p-0.5 shadow-lg shadow-brand-indigo/20 group-hover:scale-105 transition-transform duration-300">
+                    <div class="w-full h-full bg-dark-900 rounded-[10px] flex items-center justify-center">
+                        <svg class="w-5 h-5 text-brand-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                    </div>
+                </div>
+                <span class="font-extrabold text-xl tracking-wider text-white font-mono">NEXORA<span class="text-brand-cyan">.</span></span>
+            </a>
+
+            <!-- Desktop Menu -->
+            <nav class="hidden lg:flex items-center space-x-8 text-sm font-medium text-gray-300">
+                <a href="#home" class="nav-link hover:text-brand-cyan transition-colors active:text-brand-cyan">Home</a>
+                <a href="#about" class="nav-link hover:text-brand-cyan transition-colors">About</a>
+                <a href="#services" class="nav-link hover:text-brand-cyan transition-colors">Services</a>
+                <a href="#showcase" class="nav-link hover:text-brand-cyan transition-colors">Showcase</a>
+                <a href="#projects" class="nav-link hover:text-brand-cyan transition-colors">Projects</a>
+                <a href="#process" class="nav-link hover:text-brand-cyan transition-colors">Process</a>
+            </nav>
+
+            <!-- Actions & Mobile Button -->
+            <div class="flex items-center gap-4">
+                <button onclick="openDevDrawer()" class="hidden sm:flex items-center gap-2 px-3.5 py-2 rounded-xl bg-dark-700/80 hover:bg-dark-600 text-xs font-mono text-gray-200 border border-white/10 transition-colors shadow-sm">
+                    <svg class="w-4 h-4 text-brand-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+                    Deploy Drawer
+                </button>
+                
+                <a href="#contact" class="hidden md:inline-flex items-center justify-center px-5 py-2.5 rounded-xl text-xs font-semibold uppercase tracking-wider text-white bg-gradient-to-r from-brand-indigo to-brand-cyan hover:opacity-90 transition-all shadow-md shadow-brand-indigo/20">
+                    Start a Project
+                </a>
+
+                <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="lg:hidden text-gray-300 hover:text-white focus:outline-none p-1 rounded-lg bg-dark-800 border border-white/10">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" id="hamburger-icon">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Drawer Menu -->
+        <div id="mobile-menu" class="hidden lg:hidden max-w-7xl mx-auto mt-2 glass-panel rounded-2xl p-6 border border-white/10 flex-col space-y-4 text-center">
+            <a href="#home" onclick="closeMobileMenu()" class="mobile-link text-gray-200 hover:text-brand-cyan py-2 border-b border-white/5">Home</a>
+            <a href="#about" onclick="closeMobileMenu()" class="mobile-link text-gray-200 hover:text-brand-cyan py-2 border-b border-white/5">About</a>
+            <a href="#services" onclick="closeMobileMenu()" class="mobile-link text-gray-200 hover:text-brand-cyan py-2 border-b border-white/5">Services</a>
+            <a href="#showcase" onclick="closeMobileMenu()" class="mobile-link text-gray-200 hover:text-brand-cyan py-2 border-b border-white/5">Showcase</a>
+            <a href="#projects" onclick="closeMobileMenu()" class="mobile-link text-gray-200 hover:text-brand-cyan py-2 border-b border-white/5">Projects</a>
+            <a href="#process" onclick="closeMobileMenu()" class="mobile-link text-gray-200 hover:text-brand-cyan py-2 border-b border-white/5">Process</a>
+            <a href="#contact" onclick="closeMobileMenu()" class="mobile-link inline-block mt-2 px-6 py-3 rounded-xl text-xs font-semibold uppercase tracking-wider text-white bg-gradient-to-r from-brand-indigo to-brand-cyan">Start a Project</a>
+            <button onclick="openDevDrawer(); closeMobileMenu();" class="w-full text-center py-2 text-xs font-mono text-brand-cyan">View Developer Setup / Code</button>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section id="home" class="relative min-h-screen pt-32 pb-20 flex items-center justify-center overflow-hidden">
+        <!-- Background Lighting Orbs -->
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-brand-indigo/20 rounded-full filter blur-[120px] pointer-events-none animate-pulse-glow"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-brand-cyan/20 rounded-full filter blur-[120px] pointer-events-none animate-pulse-glow" style="animation-delay: 2s;"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            <!-- Hero Text Content -->
+            <div class="lg:col-span-7 space-y-8 text-left">
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel border border-brand-cyan/30 text-brand-cyan text-xs font-mono uppercase tracking-widest shadow-lg">
+                    <span class="w-2 h-2 rounded-full bg-brand-cyan animate-ping"></span>
+                    Digital Technology Agency
+                </div>
+
+                <h1 class="text-4xl sm:text-6xl xl:text-7xl font-extrabold tracking-tight leading-[1.1] text-white">
+                    WE BUILD <br>
+                    <span class="text-gradient">THE DIGITAL FUTURE.</span>
+                </h1>
+
+                <p class="text-lg sm:text-xl text-gray-300 max-w-2xl font-normal leading-relaxed">
+                    NEXORA creates immersive 3D digital products, intelligent web experiences, and high-performance technology solutions for ambitious global brands.
+                </p>
+
+                <div class="flex flex-wrap items-center gap-4 pt-2">
+                    <a href="#contact" class="px-8 py-4 rounded-xl text-sm font-semibold uppercase tracking-wider text-white bg-gradient-to-r from-brand-indigo via-brand-purple to-brand-cyan hover:shadow-lg hover:shadow-brand-indigo/30 transition-all duration-300 transform hover:-translate-y-0.5">
+                        Start a Project
+                    </a>
+                    <a href="#projects" class="px-8 py-4 rounded-xl text-sm font-semibold uppercase tracking-wider text-gray-200 glass-panel hover:bg-white/10 border border-white/10 transition-all duration-300">
+                        Explore Work
+                    </a>
+                </div>
+
+                <!-- Live Animated Stats Counters -->
+                <div class="pt-8 border-t border-white/10 grid grid-cols-3 gap-6">
+                    <div>
+                        <div class="text-3xl sm:text-4xl font-extrabold text-white font-mono" id="stat-1">0</div>
+                        <div class="text-xs text-gray-400 uppercase tracking-wider mt-1 font-mono">Projects Delivered</div>
+                    </div>
+                    <div>
+                        <div class="text-3xl sm:text-4xl font-extrabold text-white font-mono" id="stat-2">0</div>
+                        <div class="text-xs text-gray-400 uppercase tracking-wider mt-1 font-mono">Global Clients</div>
+                    </div>
+                    <div>
+                        <div class="text-3xl sm:text-4xl font-extrabold text-white font-mono" id="stat-3">0</div>
+                        <div class="text-xs text-gray-400 uppercase tracking-wider mt-1 font-mono">Years Exp.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hero 3D Interactive Canvas -->
+            <div class="lg:col-span-5 relative h-[450px] sm:h-[520px] w-full rounded-3xl glass-panel border border-white/10 overflow-hidden shadow-2xl flex items-center justify-center group">
+                
+                <!-- WebGL / Three.js Target -->
+                <div id="hero-3d-container" class="w-full h-full absolute inset-0"></div>
+                
+                <!-- WebGL Fallback container (Rendered if WebGL is unavailable) -->
+                <div id="hero-fallback" class="hidden absolute inset-0 bg-gradient-to-br from-dark-800 to-dark-900 flex flex-col items-center justify-center p-8 text-center">
+                    <div class="w-36 h-36 rounded-full border-2 border-brand-cyan/40 border-t-brand-cyan animate-spin-slow mb-6 flex items-center justify-center relative">
+                        <div class="w-24 h-24 rounded-full bg-brand-indigo/20 backdrop-blur flex items-center justify-center">
+                            <span class="text-brand-cyan font-mono text-xs">3D GRAPHICS</span>
+                        </div>
+                    </div>
+                    <p class="text-sm font-mono text-brand-cyan">INTERACTIVE SPATIAL ENGINE</p>
+                    <p class="text-xs text-gray-400 mt-2">Hardware acceleration fallback enabled</p>
+                </div>
+
+                <!-- Floating Holographic Badge Tags -->
+                <div class="absolute top-6 left-6 glass-panel px-3.5 py-1.5 rounded-lg text-xs font-mono text-brand-cyan border border-brand-cyan/20 animate-float shadow-md pointer-events-none">
+                    ⚡ AI & NEURAL NETS
+                </div>
+                <div class="absolute bottom-10 right-6 glass-panel px-3.5 py-1.5 rounded-lg text-xs font-mono text-brand-purple border border-brand-purple/20 animate-float shadow-md pointer-events-none" style="animation-delay: 1.5s;">
+                    🌐 WEBGL 3D ENGINES
+                </div>
+                <div class="absolute top-1/2 right-4 glass-panel px-3.5 py-1.5 rounded-lg text-xs font-mono text-brand-indigo border border-brand-indigo/20 animate-float shadow-md pointer-events-none" style="animation-delay: 3s;">
+                    ☁️ CLOUD INFRASTRUCTURE
+                </div>
+            </div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <a href="#about" class="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex flex-col items-center text-gray-400 hover:text-white transition-colors">
+            <span class="text-[10px] font-mono tracking-widest uppercase mb-2">Scroll</span>
+            <div class="w-5 h-9 rounded-full border-2 border-white/20 flex justify-center p-1">
+                <div class="w-1 h-2 bg-brand-cyan rounded-full animate-bounce"></div>
+            </div>
+        </a>
+    </section>
+
+    <!-- TRUST / LOGO STRIP MARQUEE -->
+    <section class="py-8 bg-dark-800/80 border-y border-white/5 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 mb-4 text-center">
+            <p class="text-xs font-mono uppercase tracking-widest text-gray-500">TRUSTED BY TECH INNOVATORS GLOBALWIDE</p>
+        </div>
+        <div class="relative w-full flex overflow-x-hidden">
+            <div class="animate-marquee whitespace-nowrap flex items-center gap-12 sm:gap-20 text-gray-400 font-mono text-sm sm:text-base font-bold opacity-70">
+                <span class="flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-brand-cyan"></div> AURA.LABS</span>
+                <span class="flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-brand-indigo"></div> SYNTHETIX</span>
+                <span class="flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-brand-purple"></div> QUANTUM_AI</span>
+                <span class="flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-emerald-400"></div> NEXUS_CLOUD</span>
+                <span class="flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-pink-400"></div> HYPERION</span>
+                <span class="flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-amber-400"></div> APEX_FINANCE</span>
+                <!-- Duplicate set for seamless loop -->
+                <span class="flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-brand-cyan"></div> AURA.LABS</span>
+                <span class="flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-brand-indigo"></div> SYNTHETIX</span>
+                <span class="flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-brand-purple"></div> QUANTUM_AI</span>
+                <span class="flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-emerald-400"></div> NEXUS_CLOUD</span>
+                <span class="flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-pink-400"></div> HYPERION</span>
+                <span class="flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-amber-400"></div> APEX_FINANCE</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section id="about" class="py-24 relative bg-dark-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Left Decorative Graphic Panel -->
+                <div class="lg:col-span-5 relative">
+                    <div class="glass-panel p-8 rounded-3xl border border-white/10 relative overflow-hidden shadow-xl">
+                        <div class="absolute -right-10 -top-10 w-40 h-40 bg-brand-purple/20 rounded-full blur-3xl"></div>
+                        <h3 class="font-mono text-xs text-brand-cyan uppercase tracking-widest mb-4">// ARCHITECTURE & DNA</h3>
+                        <p class="text-2xl font-bold text-white mb-6 leading-tight">Engineering scalable digital platforms with spatial aesthetics.</p>
+                        
+                        <div class="space-y-4">
+                            <div class="flex items-start gap-4">
+                                <div class="w-8 h-8 rounded-lg bg-brand-cyan/10 text-brand-cyan flex items-center justify-center shrink-0 mt-1 font-bold text-sm">✓</div>
+                                <div>
+                                    <h4 class="text-white font-semibold text-sm">Ultra-High Performance</h4>
+                                    <p class="text-xs text-gray-400 mt-0.5">Sub-second load times, optimized graphics pipelines, strict optimization.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4">
+                                <div class="w-8 h-8 rounded-lg bg-brand-indigo/10 text-brand-indigo flex items-center justify-center shrink-0 mt-1 font-bold text-sm">✓</div>
+                                <div>
+                                    <h4 class="text-white font-semibold text-sm">Spatial UI Systems</h4>
+                                    <p class="text-xs text-gray-400 mt-0.5">Interactive WebGL components tailored specifically for enterprise applications.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mini Visual Canvas -->
+                        <div class="mt-8 h-36 w-full rounded-2xl bg-dark-900 border border-white/10 relative overflow-hidden flex items-center justify-center">
+                            <canvas id="about-mini-canvas" class="w-full h-full"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right About Copy & Detailed Metrics -->
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-brand-indigo/10 text-brand-indigo text-xs font-mono uppercase tracking-widest border border-brand-indigo/20">
+                        About Nexora
+                    </div>
+
+                    <h2 class="text-3xl sm:text-5xl font-extrabold text-white leading-tight">
+                        WE TURN COMPLEX IDEAS INTO <span class="text-gradient">DIGITAL EXPERIENCES.</span>
+                    </h2>
+
+                    <p class="text-gray-300 leading-relaxed text-base">
+                        Founded by digital architects and 3D visual engineers, NEXORA sits at the intersection of modern web design, real-time spatial computing, and scalable cloud engineering. We partner with fast-growing startups and global enterprises to build products that captivate users and drive conversion.
+                    </p>
+
+                    <!-- Metrics Grid -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6">
+                        <div class="glass-panel p-4 rounded-2xl border border-white/5 text-center">
+                            <div class="text-2xl sm:text-3xl font-extrabold font-mono text-brand-cyan">50+</div>
+                            <div class="text-xs text-gray-400 mt-1 font-mono">Digital Projects</div>
+                        </div>
+                        <div class="glass-panel p-4 rounded-2xl border border-white/5 text-center">
+                            <div class="text-2xl sm:text-3xl font-extrabold font-mono text-brand-indigo">30+</div>
+                            <div class="text-xs text-gray-400 mt-1 font-mono">Global Clients</div>
+                        </div>
+                        <div class="glass-panel p-4 rounded-2xl border border-white/5 text-center">
+                            <div class="text-2xl sm:text-3xl font-extrabold font-mono text-brand-purple">12+</div>
+                            <div class="text-xs text-gray-400 mt-1 font-mono">Tech Specialists</div>
+                        </div>
+                        <div class="glass-panel p-4 rounded-2xl border border-white/5 text-center">
+                            <div class="text-2xl sm:text-3xl font-extrabold font-mono text-emerald-400">99%</div>
+                            <div class="text-xs text-gray-400 mt-1 font-mono">Client Satisfaction</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICES SECTION -->
+    <section id="services" class="py-24 relative bg-dark-800/40 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-cyan/10 text-brand-cyan text-xs font-mono uppercase tracking-widest border border-brand-cyan/20">
+                    Capabilities
+                </div>
+                <h2 class="text-3xl sm:text-5xl font-extrabold text-white">
+                    OUR CORE <span class="text-gradient">SERVICES.</span>
+                </h2>
+                <p class="text-gray-400 text-sm sm:text-base">End-to-end technological execution designed to elevate modern digital footprints.</p>
+            </div>
+
+            <!-- Services Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Service 1 -->
+                <div class="glass-panel p-8 rounded-3xl glass-panel-hover group relative overflow-hidden tilt-card">
+                    <div class="text-xs font-mono text-brand-cyan mb-6">// 01 ARCHITECTURE</div>
+                    <div class="w-12 h-12 rounded-2xl bg-brand-cyan/10 text-brand-cyan flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 border border-brand-cyan/20">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Web Development</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">High-speed React & Next.js web applications built with clean architecture, strict TypeScript patterns, and fluid animations.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-2.5 py-1 rounded-md bg-white/5 text-[11px] font-mono text-gray-300">React</span>
+                        <span class="px-2.5 py-1 rounded-md bg-white/5 text-[11px] font-mono text-gray-300">Next.js</span>
+                        <span class="px-2.5 py-1 rounded-md bg-white/5 text-[11px] font-mono text-gray-300">Tailwind</span>
+                    </div>
+                </div>
+
+                <!-- Service 2 -->
+                <div class="glass-panel p-8 rounded-3xl glass-panel-hover group relative overflow-hidden tilt-card">
+                    <div class="text-xs font-mono text-brand-indigo mb-6">// 02 INTERACTION</div>
+                    <div class="w-12 h-12 rounded-2xl bg-brand-indigo/10 text-brand-indigo flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 border border-brand-indigo/20">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">UI/UX Design Systems</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">Human-centered UI/UX systems, spatial wireframing, high-fidelity interactive prototypes, and scalable component libraries.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-2.5 py-1 rounded-md bg-white/5 text-[11px] font-mono text-gray-300">Figma</span>
+                        <span class="px-2.5 py-1 rounded-md bg-white/5 text-[11px] font-mono text-gray-300">Design Systems</span>
+                        <span class="px-2.5 py-1 rounded-md bg-white/5 text-[11px] font-mono text-gray-300">Prototyping</span>
+                    </div>
+                </div>
+
+                <!-- Service 3 -->
+                <div class="glass-panel p-8 rounded-3xl glass-panel-hover group relative overflow-hidden tilt-card border-brand-purple/30">
+                    <div class="text-xs font-mono text-brand-purple mb-6">// 03 SPATIAL 3D</div>
+                    <div class="w-12 h-12 rounded-2xl bg-brand-purple/10 text-brand-purple flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 border border-brand-purple/20">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">3D & Interactive WebGL</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">Real-time WebGL graphics, Three.js product showcases, dynamic GLSL shaders, and immersive interactive web environments.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-2.5 py-1 rounded-md bg-white/5 text-[11px] font-mono text-gray-300">Three.js</span>
+                        <span class="px-2.5 py-1 rounded-md bg-white/5 text-[11px] font-mono text-gray-300">WebGL</span>
+                        <span class="px-2.5 py-1 rounded-md bg-white/5 text-[11px] font-mono text-gray-300">Shaders</span>
+                    </div>
+                </div>
+
+                <!-- Service 4 -->
+                <div class="glass-panel p-8 rounded-3xl glass-panel-hover group relative overflow-hidden tilt-card">
+                    <div class="text-xs font-mono text-emerald-400 mb-6">// 04 INTELLIGENCE</div>
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 border border-emerald-500/20">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">AI Engine Solutions</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">Integration of Large Language Models, custom autonomous agents, automated workflow pipelines, and predictive data engines.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-2.5 py-1 rounded-md bg-white/5 text-[11px] font-mono text-gray-300">OpenAI</span>
+                        <span class="px-2.5 py-1 rounded-md bg-white/5 text-[11px] font-mono text-gray-300">Python</span>
+                        <span class="px-2.5 py-1 rounded-md bg-white/5 text-[11px] font-mono text-gray-300">LangChain</span>
+                    </div>
+                </div>
+
+                <!-- Service 5 -->
+                <div class="glass-panel p-8 rounded-3xl glass-panel-hover group relative overflow-hidden tilt-card">
+                    <div class="text-xs font-mono text-sky-400 mb-6">// 05 DEPLOYMENT</div>
+                    <div class="w-12 h-12 rounded-2xl bg-sky-500/10 text-sky-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 border border-sky-500/20">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 001-9.999 5.002 5.002 0 00-9.78 2.096A4.001 4.001 0 003 15z"/></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Cloud Architecture</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">Serverless deployments, scalable microservices, Kubernetes clusters, and global edge CDN distribution systems.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-2.5 py-1 rounded-md bg-white/5 text-[11px] font-mono text-gray-300">AWS</span>
+                        <span class="px-2.5 py-1 rounded-md bg-white/5 text-[11px] font-mono text-gray-300">Docker</span>
+                        <span class="px-2.5 py-1 rounded-md bg-white/5 text-[11px] font-mono text-gray-300">Vercel</span>
+                    </div>
+                </div>
+
+                <!-- Service 6 -->
+                <div class="glass-panel p-8 rounded-3xl glass-panel-hover group relative overflow-hidden tilt-card">
+                    <div class="text-xs font-mono text-pink-400 mb-6">// 06 STRATEGY</div>
+                    <div class="w-12 h-12 rounded-2xl bg-pink-500/10 text-pink-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 border border-pink-500/20">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Digital Product Strategy</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">Product roadmap planning, technical audits, conversion rate optimization (CRO), and growth engineering.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-2.5 py-1 rounded-md bg-white/5 text-[11px] font-mono text-gray-300">Audits</span>
+                        <span class="px-2.5 py-1 rounded-md bg-white/5 text-[11px] font-mono text-gray-300">Analytics</span>
+                        <span class="px-2.5 py-1 rounded-md bg-white/5 text-[11px] font-mono text-gray-300">Roadmaps</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 3D SHOWCASE SECTION -->
+    <section id="showcase" class="py-24 relative bg-dark-900 overflow-hidden border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glass-panel rounded-3xl p-8 sm:p-12 border border-brand-indigo/30 relative overflow-hidden shadow-2xl">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    
+                    <div class="lg:col-span-6 space-y-6">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-purple/10 text-brand-purple text-xs font-mono uppercase tracking-widest border border-brand-purple/20">
+                            Interactive Showcase
+                        </div>
+                        <h2 class="text-3xl sm:text-5xl font-extrabold text-white leading-tight">
+                            ENGINEERED TO <br>
+                            <span class="text-gradient">FEEL DIFFERENT.</span>
+                        </h2>
+                        <p class="text-gray-300 leading-relaxed text-sm sm:text-base">
+                            Technology should not only perform; it should create an indelible sensory impression. We combine custom WebGL shaders, real-time particle simulations, and dynamic physics.
+                        </p>
+                        <div class="pt-2">
+                            <a href="#contact" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-xs font-semibold uppercase tracking-wider text-white bg-brand-indigo hover:bg-brand-indigo/80 transition-colors shadow-lg shadow-brand-indigo/20">
+                                Request Custom Prototype
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Canvas Particle Field inside Showcase -->
+                    <div class="lg:col-span-6 relative h-80 rounded-2xl bg-dark-800 overflow-hidden border border-white/10 flex items-center justify-center group">
+                        <canvas id="showcase-canvas" class="w-full h-full cursor-crosshair"></canvas>
+                        <div class="absolute bottom-4 left-4 glass-panel px-3 py-1 rounded-lg text-[11px] font-mono text-brand-cyan border border-brand-cyan/20 pointer-events-none">
+                            [ Move cursor over field to attract nodes ]
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROJECTS SECTION -->
+    <section id="projects" class="py-24 relative bg-dark-800/30 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+                <div class="space-y-4 max-w-2xl">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-indigo/10 text-brand-indigo text-xs font-mono uppercase tracking-widest border border-brand-indigo/20">
+                        Selected Works
+                    </div>
+                    <h2 class="text-3xl sm:text-5xl font-extrabold text-white">
+                        FEATURED <span class="text-gradient">PROJECTS.</span>
+                    </h2>
+                    <p class="text-gray-400 text-sm">Explore our recent client implementations and high-impact digital products.</p>
+                </div>
+
+                <!-- Category Filters -->
+                <div class="flex flex-wrap gap-2 font-mono text-xs" id="project-filters">
+                    <button onclick="filterProjects('all')" class="filter-btn active px-4 py-2 rounded-xl bg-brand-indigo text-white transition-all" data-filter="all">ALL</button>
+                    <button onclick="filterProjects('ai')" class="filter-btn px-4 py-2 rounded-xl glass-panel text-gray-300 hover:text-white transition-all" data-filter="ai">AI / WEBGL</button>
+                    <button onclick="filterProjects('fintech')" class="filter-btn px-4 py-2 rounded-xl glass-panel text-gray-300 hover:text-white transition-all" data-filter="fintech">FINTECH</button>
+                    <button onclick="filterProjects('3d')" class="filter-btn px-4 py-2 rounded-xl glass-panel text-gray-300 hover:text-white transition-all" data-filter="3d">3D SPATIAL</button>
+                </div>
+            </div>
+
+            <!-- Projects Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="projects-container">
+                
+                <!-- Project 1 -->
+                <div class="project-card glass-panel rounded-3xl overflow-hidden glass-panel-hover group flex flex-col justify-between border border-white/10 cursor-pointer tilt-card" data-category="ai" onclick="openProjectModal('NEXA AI', 'AI SaaS Platform', 'Enterprise analytics platform leveraging real-time WebGL neural network visualizers and high-frequency data pipelines.')">
+                    <div>
+                        <div class="h-52 bg-dark-800 relative overflow-hidden">
+                            <canvas id="proj-canvas-1" class="w-full h-full"></canvas>
+                            <div class="absolute top-4 right-4 glass-panel px-3 py-1 rounded-full text-xs font-mono text-brand-cyan border border-brand-cyan/20">AI / WebGL</div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-white mb-2 group-hover:text-brand-cyan transition-colors">NEXA AI</h3>
+                            <p class="text-xs text-brand-cyan font-mono mb-3">AI SaaS Analytics Platform</p>
+                            <p class="text-gray-400 text-sm leading-relaxed">Enterprise analytics suite leveraging neural networks and real-time WebGL data graphs.</p>
+                        </div>
+                    </div>
+                    <div class="p-6 pt-0 flex justify-between items-center text-xs font-semibold text-gray-300">
+                        <span>View Project Case Study</span>
+                        <span class="text-brand-cyan group-hover:translate-x-1 transition-transform">→</span>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="project-card glass-panel rounded-3xl overflow-hidden glass-panel-hover group flex flex-col justify-between border border-white/10 cursor-pointer tilt-card" data-category="fintech" onclick="openProjectModal('VOLTEX', 'FinTech Terminal', 'High-frequency trading interface crafted with custom spatial glassmorphic UI components and ultra-low latency canvas charts.')">
+                    <div>
+                        <div class="h-52 bg-dark-800 relative overflow-hidden">
+                            <canvas id="proj-canvas-2" class="w-full h-full"></canvas>
+                            <div class="absolute top-4 right-4 glass-panel px-3 py-1 rounded-full text-xs font-mono text-brand-indigo border border-brand-indigo/20">FinTech</div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-white mb-2 group-hover:text-brand-indigo transition-colors">VOLTEX</h3>
+                            <p class="text-xs text-brand-indigo font-mono mb-3">FinTech Exchange Experience</p>
+                            <p class="text-gray-400 text-sm leading-relaxed">Real-time asset exchange interface crafted for low-latency market execution and analytics.</p>
+                        </div>
+                    </div>
+                    <div class="p-6 pt-0 flex justify-between items-center text-xs font-semibold text-gray-300">
+                        <span>View Project Case Study</span>
+                        <span class="text-brand-indigo group-hover:translate-x-1 transition-transform">→</span>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="project-card glass-panel rounded-3xl overflow-hidden glass-panel-hover group flex flex-col justify-between border border-white/10 cursor-pointer tilt-card" data-category="3d" onclick="openProjectModal('ORBIT', '3D Configurator', 'Interactive web-based photorealistic product customizer with dynamic CAD lighting and real-time material previews.')">
+                    <div>
+                        <div class="h-52 bg-dark-800 relative overflow-hidden">
+                            <canvas id="proj-canvas-3" class="w-full h-full"></canvas>
+                            <div class="absolute top-4 right-4 glass-panel px-3 py-1 rounded-full text-xs font-mono text-brand-purple border border-brand-purple/20">3D Spatial</div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-white mb-2 group-hover:text-brand-purple transition-colors">ORBIT</h3>
+                            <p class="text-xs text-brand-purple font-mono mb-3">3D Product Configurator</p>
+                            <p class="text-gray-400 text-sm leading-relaxed">Web-based photorealistic product customizer with dynamic lighting and material shaders.</p>
+                        </div>
+                    </div>
+                    <div class="p-6 pt-0 flex justify-between items-center text-xs font-semibold text-gray-300">
+                        <span>View Project Case Study</span>
+                        <span class="text-brand-purple group-hover:translate-x-1 transition-transform">→</span>
+                    </div>
+                </div>
+
+                <!-- Project 4 -->
+                <div class="project-card glass-panel rounded-3xl overflow-hidden glass-panel-hover group flex flex-col justify-between border border-white/10 cursor-pointer tilt-card" data-category="3d" onclick="openProjectModal('LUMEN', 'Creative Studio', 'Experimental interactive gallery platform celebrating generative digital artwork and GPU canvas shaders.')">
+                    <div>
+                        <div class="h-52 bg-dark-800 relative overflow-hidden">
+                            <canvas id="proj-canvas-4" class="w-full h-full"></canvas>
+                            <div class="absolute top-4 right-4 glass-panel px-3 py-1 rounded-full text-xs font-mono text-emerald-400 border border-emerald-400/20">Creative</div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors">LUMEN</h3>
+                            <p class="text-xs text-emerald-400 font-mono mb-3">Creative Digital Gallery</p>
+                            <p class="text-gray-400 text-sm leading-relaxed">Experimental interactive showcase platform celebrating generative digital artwork.</p>
+                        </div>
+                    </div>
+                    <div class="p-6 pt-0 flex justify-between items-center text-xs font-semibold text-gray-300">
+                        <span>View Project Case Study</span>
+                        <span class="text-emerald-400 group-hover:translate-x-1 transition-transform">→</span>
+                    </div>
+                </div>
+
+                <!-- Project 5 -->
+                <div class="project-card glass-panel rounded-3xl overflow-hidden glass-panel-hover group flex flex-col justify-between border border-white/10 cursor-pointer tilt-card" data-category="ai" onclick="openProjectModal('SYNTRA', 'Cloud Dashboard', 'Telemetry monitoring suite handling millions of concurrent microservice logs with predictive anomaly detection.')">
+                    <div>
+                        <div class="h-52 bg-dark-800 relative overflow-hidden">
+                            <canvas id="proj-canvas-5" class="w-full h-full"></canvas>
+                            <div class="absolute top-4 right-4 glass-panel px-3 py-1 rounded-full text-xs font-mono text-sky-400 border border-sky-400/20">Enterprise</div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-white mb-2 group-hover:text-sky-400 transition-colors">SYNTRA</h3>
+                            <p class="text-xs text-sky-400 font-mono mb-3">Enterprise Cloud Platform</p>
+                            <p class="text-gray-400 text-sm leading-relaxed">Telemetry monitoring suite handling millions of concurrent microservice logs.</p>
+                        </div>
+                    </div>
+                    <div class="p-6 pt-0 flex justify-between items-center text-xs font-semibold text-gray-300">
+                        <span>View Project Case Study</span>
+                        <span class="text-sky-400 group-hover:translate-x-1 transition-transform">→</span>
+                    </div>
+                </div>
+
+                <!-- Project 6 -->
+                <div class="project-card glass-panel rounded-3xl overflow-hidden glass-panel-hover group flex flex-col justify-between border border-white/10 cursor-pointer tilt-card" data-category="fintech" onclick="openProjectModal('AURA', 'Luxury E-Commerce', 'Bespoke web experience featuring WebGL product staging, smooth micro-interactions, and instant checkout integration.')">
+                    <div>
+                        <div class="h-52 bg-dark-800 relative overflow-hidden">
+                            <canvas id="proj-canvas-6" class="w-full h-full"></canvas>
+                            <div class="absolute top-4 right-4 glass-panel px-3 py-1 rounded-full text-xs font-mono text-pink-400 border border-pink-400/20">E-Commerce</div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-white mb-2 group-hover:text-pink-400 transition-colors">AURA</h3>
+                            <p class="text-xs text-pink-400 font-mono mb-3">Luxury Spatial E-Commerce</p>
+                            <p class="text-gray-400 text-sm leading-relaxed">High-fashion storefront engineered with smooth micro-interactions and AR previews.</p>
+                        </div>
+                    </div>
+                    <div class="p-6 pt-0 flex justify-between items-center text-xs font-semibold text-gray-300">
+                        <span>View Project Case Study</span>
+                        <span class="text-pink-400 group-hover:translate-x-1 transition-transform">→</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- PROCESS SECTION -->
+    <section id="process" class="py-24 relative bg-dark-900 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-cyan/10 text-brand-cyan text-xs font-mono uppercase tracking-widest border border-brand-cyan/20">
+                    Execution Framework
+                </div>
+                <h2 class="text-3xl sm:text-5xl font-extrabold text-white">
+                    OUR STEP <span class="text-gradient">PROCESS.</span>
+                </h2>
+                <p class="text-gray-400 text-sm sm:text-base">A disciplined engineering methodology delivering precision results on schedule.</p>
+            </div>
+
+            <!-- Steps Pipeline Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4 relative">
+                
+                <!-- Step 1 -->
+                <div class="glass-panel p-6 rounded-2xl border border-white/5 flex flex-col justify-between space-y-4 relative hover:border-brand-cyan/40 transition-colors">
+                    <div>
+                        <span class="text-3xl font-extrabold font-mono text-brand-cyan/60">01</span>
+                        <h3 class="text-lg font-bold text-white mt-2">Discover</h3>
+                        <p class="text-gray-400 text-xs mt-2 leading-relaxed">Deep-dive research, target user analysis, and technical requirement mapping.</p>
+                    </div>
+                    <div class="text-[10px] font-mono text-brand-cyan uppercase tracking-wider">Phase I</div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="glass-panel p-6 rounded-2xl border border-white/5 flex flex-col justify-between space-y-4 relative hover:border-brand-indigo/40 transition-colors">
+                    <div>
+                        <span class="text-3xl font-extrabold font-mono text-brand-indigo/60">02</span>
+                        <h3 class="text-lg font-bold text-white mt-2">Strategize</h3>
+                        <p class="text-gray-400 text-xs mt-2 leading-relaxed">Architecture specification, system design, and project roadmap creation.</p>
+                    </div>
+                    <div class="text-[10px] font-mono text-brand-indigo uppercase tracking-wider">Phase II</div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="glass-panel p-6 rounded-2xl border border-white/5 flex flex-col justify-between space-y-4 relative hover:border-brand-purple/40 transition-colors">
+                    <div>
+                        <span class="text-3xl font-extrabold font-mono text-brand-purple/60">03</span>
+                        <h3 class="text-lg font-bold text-white mt-2">Design</h3>
+                        <p class="text-gray-400 text-xs mt-2 leading-relaxed">Spatial wireframing, high-fidelity UI systems, and interactive 3D prototyping.</p>
+                    </div>
+                    <div class="text-[10px] font-mono text-brand-purple uppercase tracking-wider">Phase III</div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="glass-panel p-6 rounded-2xl border border-white/5 flex flex-col justify-between space-y-4 relative hover:border-emerald-400/40 transition-colors">
+                    <div>
+                        <span class="text-3xl font-extrabold font-mono text-emerald-400/60">04</span>
+                        <h3 class="text-lg font-bold text-white mt-2">Develop</h3>
+                        <p class="text-gray-400 text-xs mt-2 leading-relaxed">Agile coding sprints, WebGL integration, shader optimization, and API setup.</p>
+                    </div>
+                    <div class="text-[10px] font-mono text-emerald-400 uppercase tracking-wider">Phase IV</div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="glass-panel p-6 rounded-2xl border border-white/5 flex flex-col justify-between space-y-4 relative hover:border-pink-400/40 transition-colors">
+                    <div>
+                        <span class="text-3xl font-extrabold font-mono text-pink-400/60">05</span>
+                        <h3 class="text-lg font-bold text-white mt-2">Launch</h3>
+                        <p class="text-gray-400 text-xs mt-2 leading-relaxed">CI/CD global deployment, automated testing, load balancing, and handoff.</p>
+                    </div>
+                    <div class="text-[10px] font-mono text-pink-400 uppercase tracking-wider">Phase V</div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- TECHNOLOGIES SECTION -->
+    <section class="py-20 relative bg-dark-800/40 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h3 class="text-xs font-mono uppercase tracking-widest text-gray-400 mb-8">POWERED BY MODERN TECHNOLOGY STACK</h3>
+            
+            <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+                <div class="glass-panel px-5 py-3 rounded-2xl border border-white/10 text-sm font-mono text-white flex items-center gap-3 hover:border-brand-cyan/50 transition-colors cursor-default">
+                    <span class="w-2.5 h-2.5 rounded-full bg-cyan-400"></span> React.js
+                </div>
+                <div class="glass-panel px-5 py-3 rounded-2xl border border-white/10 text-sm font-mono text-white flex items-center gap-3 hover:border-white/50 transition-colors cursor-default">
+                    <span class="w-2.5 h-2.5 rounded-full bg-white"></span> Next.js
+                </div>
+                <div class="glass-panel px-5 py-3 rounded-2xl border border-white/10 text-sm font-mono text-white flex items-center gap-3 hover:border-indigo-400/50 transition-colors cursor-default">
+                    <span class="w-2.5 h-2.5 rounded-full bg-indigo-400"></span> Three.js
+                </div>
+                <div class="glass-panel px-5 py-3 rounded-2xl border border-white/10 text-sm font-mono text-white flex items-center gap-3 hover:border-green-400/50 transition-colors cursor-default">
+                    <span class="w-2.5 h-2.5 rounded-full bg-green-400"></span> Node.js
+                </div>
+                <div class="glass-panel px-5 py-3 rounded-2xl border border-white/10 text-sm font-mono text-white flex items-center gap-3 hover:border-blue-500/50 transition-colors cursor-default">
+                    <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span> TypeScript
+                </div>
+                <div class="glass-panel px-5 py-3 rounded-2xl border border-white/10 text-sm font-mono text-white flex items-center gap-3 hover:border-yellow-400/50 transition-colors cursor-default">
+                    <span class="w-2.5 h-2.5 rounded-full bg-yellow-400"></span> Python AI
+                </div>
+                <div class="glass-panel px-5 py-3 rounded-2xl border border-white/10 text-sm font-mono text-white flex items-center gap-3 hover:border-purple-400/50 transition-colors cursor-default">
+                    <span class="w-2.5 h-2.5 rounded-full bg-purple-400"></span> AWS Cloud
+                </div>
+                <div class="glass-panel px-5 py-3 rounded-2xl border border-white/10 text-sm font-mono text-white flex items-center gap-3 hover:border-pink-400/50 transition-colors cursor-default">
+                    <span class="w-2.5 h-2.5 rounded-full bg-pink-400"></span> Figma
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS SECTION -->
+    <section class="py-24 relative bg-dark-900 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-purple/10 text-brand-purple text-xs font-mono uppercase tracking-widest border border-brand-purple/20">
+                    Client Feedback
+                </div>
+                <h2 class="text-3xl sm:text-5xl font-extrabold text-white">
+                    WHAT PARTNERS <span class="text-gradient">SAY.</span>
+                </h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <div class="glass-panel p-8 rounded-3xl border border-white/10 flex flex-col justify-between">
+                    <p class="text-gray-300 text-sm leading-relaxed italic mb-6">
+                        "NEXORA completely reshaped our product strategy. The custom 3D web experience they built increased our user engagement by 180%."
+                    </p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-full bg-brand-cyan/20 border border-brand-cyan/40 flex items-center justify-center font-bold text-brand-cyan text-sm font-mono">
+                            AK
+                        </div>
+                        <div>
+                            <h4 class="text-white font-semibold text-sm">Alex Thorne</h4>
+                            <p class="text-xs text-gray-400">CTO, Apex Dynamics</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-8 rounded-3xl border border-white/10 flex flex-col justify-between">
+                    <p class="text-gray-300 text-sm leading-relaxed italic mb-6">
+                        "The technical precision and WebGL visual execution were second to none. Delivered our enterprise cloud platform two weeks ahead of schedule."
+                    </p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-full bg-brand-indigo/20 border border-brand-indigo/40 flex items-center justify-center font-bold text-brand-indigo text-sm font-mono">
+                            SL
+                        </div>
+                        <div>
+                            <h4 class="text-white font-semibold text-sm">Sophia Lin</h4>
+                            <p class="text-xs text-gray-400">VP of Product, Syntra Cloud</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-8 rounded-3xl border border-white/10 flex flex-col justify-between">
+                    <p class="text-gray-300 text-sm leading-relaxed italic mb-6">
+                        "NEXORA bridges the gap between high-end digital design and bulletproof engineering. They are our go-to agency for flagship launches."
+                    </p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-full bg-brand-purple/20 border border-brand-purple/40 flex items-center justify-center font-bold text-brand-purple text-sm font-mono">
+                            MR
+                        </div>
+                        <div>
+                            <h4 class="text-white font-semibold text-sm">Marcus Reyes</h4>
+                            <p class="text-xs text-gray-400">Founder, Lumen Digital</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA SECTION -->
+    <section class="py-20 relative overflow-hidden bg-dark-900 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glass-panel rounded-3xl p-10 sm:p-16 border border-brand-cyan/30 text-center relative overflow-hidden bg-gradient-to-r from-brand-indigo/20 via-dark-800 to-brand-cyan/20 shadow-2xl">
+                <div class="max-w-2xl mx-auto space-y-6 relative z-10">
+                    <h2 class="text-3xl sm:text-5xl font-extrabold text-white">
+                        READY TO BUILD <br><span class="text-gradient">WHAT'S NEXT?</span>
+                    </h2>
+                    <p class="text-gray-300 text-sm sm:text-base">
+                        Let's turn your ambitious idea into a high-performance digital experience. Schedule an architecture discovery session today.
+                    </p>
+                    <div class="pt-4 flex justify-center gap-4">
+                        <a href="#contact" class="px-8 py-4 rounded-xl text-sm font-semibold uppercase tracking-wider text-white bg-gradient-to-r from-brand-indigo to-brand-cyan hover:opacity-90 transition-all shadow-lg shadow-brand-cyan/20">
+                            Start a Project
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT SECTION -->
+    <section id="contact" class="py-24 relative border-t border-white/5 bg-dark-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                
+                <div class="lg:col-span-5 space-y-6">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-cyan/10 text-brand-cyan text-xs font-mono uppercase tracking-widest border border-brand-cyan/20">
+                        Get In Touch
+                    </div>
+                    <h2 class="text-3xl sm:text-5xl font-extrabold text-white leading-tight">
+                        LET'S TALK <br><span class="text-gradient">BUSINESS.</span>
+                    </h2>
+                    <p class="text-gray-400 text-sm sm:text-base">
+                        Have a project in mind, a technological challenge to solve, or looking for a long-term engineering partner? We'd love to hear from you.
+                    </p>
+
+                    <div class="space-y-4 pt-4">
+                        <div class="glass-panel p-4 rounded-2xl border border-white/5 flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-xl bg-brand-cyan/10 text-brand-cyan flex items-center justify-center font-bold text-lg">
+                                ✉️
+                            </div>
+                            <div>
+                                <div class="text-[11px] text-gray-400 font-mono uppercase">DIRECT EMAIL</div>
+                                <a href="mailto:hello@nexora-agency.demo" class="text-sm font-bold text-white hover:text-brand-cyan transition-colors">hello@nexora-agency.demo</a>
+                            </div>
+                        </div>
+
+                        <div class="glass-panel p-4 rounded-2xl border border-white/5 flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-xl bg-brand-indigo/10 text-brand-indigo flex items-center justify-center font-bold text-lg">
+                                📍
+                            </div>
+                            <div>
+                                <div class="text-[11px] text-gray-400 font-mono uppercase">HEADQUARTERS</div>
+                                <div class="text-sm font-bold text-white">Global Digital Agency (Remote Native)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <div class="lg:col-span-7">
+                    <div class="glass-panel p-8 sm:p-10 rounded-3xl border border-white/10 shadow-xl">
+                        <form id="contact-form" onsubmit="handleFormSubmit(event)" class="space-y-6">
+                            
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-xs font-mono text-gray-300 uppercase mb-2">Your Name *</label>
+                                    <input type="text" id="form-name" required placeholder="Alex Morgan" class="w-full px-4 py-3 rounded-xl bg-dark-900/80 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-brand-cyan transition-colors text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-mono text-gray-300 uppercase mb-2">Email Address *</label>
+                                    <input type="email" id="form-email" required placeholder="alex@company.com" class="w-full px-4 py-3 rounded-xl bg-dark-900/80 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-brand-cyan transition-colors text-sm">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-xs font-mono text-gray-300 uppercase mb-2">Company / Organization</label>
+                                    <input type="text" id="form-company" placeholder="Acme Inc." class="w-full px-4 py-3 rounded-xl bg-dark-900/80 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-brand-cyan transition-colors text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-mono text-gray-300 uppercase mb-2">Project Type *</label>
+                                    <select id="form-type" class="w-full px-4 py-3 rounded-xl bg-dark-900 border border-white/10 text-white focus:outline-none focus:border-brand-cyan transition-colors text-sm">
+                                        <option>Web Application</option>
+                                        <option>3D & WebGL Experience</option>
+                                        <option>UI/UX Design System</option>
+                                        <option>AI Engine Integration</option>
+                                        <option>Full Digital Transformation</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-mono text-gray-300 uppercase mb-2">Project Budget (USD)</label>
+                                <select id="form-budget" class="w-full px-4 py-3 rounded-xl bg-dark-900 border border-white/10 text-white focus:outline-none focus:border-brand-cyan transition-colors text-sm">
+                                    <option>$10,000 - $25,000</option>
+                                    <option>$25,000 - $50,000</option>
+                                    <option>$50,000 - $100,000+</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-mono text-gray-300 uppercase mb-2">Project Overview *</label>
+                                <textarea id="form-message" required rows="4" placeholder="Tell us about your goals, timeline, and key requirements..." class="w-full px-4 py-3 rounded-xl bg-dark-900/80 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-brand-cyan transition-colors text-sm"></textarea>
+                            </div>
+
+                            <button type="submit" class="w-full py-4 rounded-xl text-xs font-semibold uppercase tracking-wider text-white bg-gradient-to-r from-brand-indigo via-brand-purple to-brand-cyan hover:opacity-90 transition-all shadow-md shadow-brand-indigo/20">
+                                Send Inquiry
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="py-12 border-t border-white/10 bg-dark-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                
+                <div class="flex items-center gap-3">
+                    <div class="w-7 h-7 rounded-lg bg-brand-cyan flex items-center justify-center text-dark-900 font-bold text-xs">N</div>
+                    <span class="font-extrabold text-lg tracking-wider text-white font-mono">NEXORA<span class="text-brand-cyan">.</span></span>
+                    <span class="text-xs text-gray-500 ml-2">© 2026 NEXORA Agency. All rights reserved.</span>
+                </div>
+
+                <div class="flex flex-wrap justify-center gap-6 text-xs text-gray-400 font-mono">
+                    <a href="#home" class="hover:text-white transition-colors">Home</a>
+                    <a href="#about" class="hover:text-white transition-colors">About</a>
+                    <a href="#services" class="hover:text-white transition-colors">Services</a>
+                    <a href="#projects" class="hover:text-white transition-colors">Projects</a>
+                    <button onclick="openDevDrawer()" class="hover:text-brand-cyan transition-colors">Deploy Drawer</button>
+                </div>
+
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODAL 1: PROJECT DETAILS MODAL -->
+    <div id="project-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+        <div class="glass-panel p-8 rounded-3xl max-w-xl w-full border border-white/10 relative space-y-6 shadow-2xl">
+            <button onclick="closeProjectModal()" class="absolute top-6 right-6 text-gray-400 hover:text-white text-xl">&times;</button>
+            <div id="modal-badge" class="inline-block px-3 py-1 rounded-full text-xs font-mono bg-brand-cyan/10 text-brand-cyan border border-brand-cyan/20">Category</div>
+            <h3 id="modal-title" class="text-2xl font-extrabold text-white">Project Title</h3>
+            <p id="modal-desc" class="text-gray-300 text-sm leading-relaxed">Detailed overview of the project...</p>
+            <div class="p-4 rounded-xl bg-dark-900 border border-white/5 text-xs text-gray-400 font-mono space-y-1">
+                <div>✓ Architecture Audit & System Specification</div>
+                <div>✓ Custom High-Performance WebGL Engine</div>
+                <div>✓ Production Deployed on Edge Global CDN</div>
+            </div>
+            <div class="pt-2">
+                <button onclick="closeProjectModal()" class="w-full py-3.5 rounded-xl bg-brand-indigo text-white text-xs font-semibold uppercase tracking-wider hover:bg-brand-indigo/80 transition-colors">Close Preview</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: CONTACT FORM SUCCESS CONFIRMATION -->
+    <div id="contact-success-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+        <div class="glass-panel p-8 rounded-3xl max-w-md w-full border border-emerald-500/30 text-center space-y-6 shadow-2xl">
+            <div class="w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto text-2xl font-bold">✓</div>
+            <h3 class="text-2xl font-extrabold text-white">Inquiry Prepared</h3>
+            <p class="text-gray-300 text-sm">Thanks! Your project inquiry has been validated successfully.</p>
+            <p class="text-xs text-gray-400">Our engineering team will review your requirements and respond within 24 hours.</p>
+            <button onclick="closeContactModal()" class="w-full py-3.5 rounded-xl bg-emerald-500 text-dark-900 font-bold text-xs uppercase tracking-wider hover:bg-emerald-400 transition-colors">Done</button>
+        </div>
+    </div>
+
+    <!-- MODAL 3: VITE / REACT / VERCEL PROJECT DRAWER -->
+    <div id="dev-drawer" class="fixed inset-0 z-50 hidden flex justify-end bg-black/75 backdrop-blur-sm">
+        <div class="w-full max-w-2xl bg-dark-900 border-l border-white/10 h-full p-6 overflow-y-auto space-y-6">
+            <div class="flex items-center justify-between border-b border-white/10 pb-4">
+                <div>
+                    <h3 class="text-lg font-bold text-white font-mono">Vite + React + Vercel Blueprint</h3>
+                    <p class="text-xs text-gray-400">Project setup files for standalone npm deployment</p>
+                </div>
+                <button onclick="closeDevDrawer()" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+            </div>
+
+            <!-- Tab Buttons -->
+            <div class="flex flex-wrap gap-2 border-b border-white/10 pb-3 text-xs font-mono">
+                <button onclick="switchDevTab('pkg')" id="tab-pkg" class="px-3 py-1.5 rounded-lg bg-brand-indigo text-white transition-colors">package.json</button>
+                <button onclick="switchDevTab('vite')" id="tab-vite" class="px-3 py-1.5 rounded-lg glass-panel text-gray-300 hover:text-white transition-colors">vite.config.js</button>
+                <button onclick="switchDevTab('app')" id="tab-app" class="px-3 py-1.5 rounded-lg glass-panel text-gray-300 hover:text-white transition-colors">App.jsx</button>
+                <button onclick="switchDevTab('css')" id="tab-css" class="px-3 py-1.5 rounded-lg glass-panel text-gray-300 hover:text-white transition-colors">index.css</button>
+                <button onclick="switchDevTab('readme')" id="tab-readme" class="px-3 py-1.5 rounded-lg glass-panel text-gray-300 hover:text-white transition-colors">README.md</button>
+            </div>
+
+            <!-- Code Displays -->
+            <div id="code-pkg" class="space-y-2">
+                <div class="text-xs font-mono text-gray-400 flex justify-between items-center">
+                    <span>package.json</span>
+                    <button onclick="copyCode('pkg-content')" class="text-brand-cyan hover:underline text-[11px]">Copy Code</button>
+                </div>
+                <pre class="bg-dark-800 p-4 rounded-xl text-xs font-mono text-gray-200 overflow-x-auto border border-white/5"><code id="pkg-content">{
+  "name": "nexora-3d-agency",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "three": "^0.158.0",
+    "lucide-react": "^0.292.0",
+    "tailwindcss": "^3.3.5"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.37",
+    "@vitejs/plugin-react": "^4.2.0",
+    "vite": "^5.0.0"
+  }
+}</code></pre>
+            </div>
+
+            <div id="code-vite" class="space-y-2 hidden">
+                <div class="text-xs font-mono text-gray-400 flex justify-between items-center">
+                    <span>vite.config.js</span>
+                    <button onclick="copyCode('vite-content')" class="text-brand-cyan hover:underline text-[11px]">Copy Code</button>
+                </div>
+                <pre class="bg-dark-800 p-4 rounded-xl text-xs font-mono text-gray-200 overflow-x-auto border border-white/5"><code id="vite-content">import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+
+export default defineConfig({
+  plugins: [react()],
+  build: {
+    outDir: 'dist',
+    sourcemap: false
+  }
+});</code></pre>
+            </div>
+
+            <div id="code-app" class="space-y-2 hidden">
+                <div class="text-xs font-mono text-gray-400 flex justify-between items-center">
+                    <span>App.jsx (Sample Component Shell)</span>
+                    <button onclick="copyCode('app-content')" class="text-brand-cyan hover:underline text-[11px]">Copy Code</button>
+                </div>
+                <pre class="bg-dark-800 p-4 rounded-xl text-xs font-mono text-gray-200 overflow-x-auto border border-white/5"><code id="app-content">import React, { useEffect } from 'react';
+
+export default function App() {
+  return (
+    &lt;div className="bg-slate-950 text-white min-h-screen"&gt;
+      &lt;h1 className="text-4xl font-bold text-center pt-20"&gt;NEXORA 3D Agency&lt;/h1&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+            </div>
+
+            <div id="code-css" class="space-y-2 hidden">
+                <div class="text-xs font-mono text-gray-400 flex justify-between items-center">
+                    <span>index.css</span>
+                    <button onclick="copyCode('css-content')" class="text-brand-cyan hover:underline text-[11px]">Copy Code</button>
+                </div>
+                <pre class="bg-dark-800 p-4 rounded-xl text-xs font-mono text-gray-200 overflow-x-auto border border-white/5"><code id="css-content">@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #030712;
+  color: #f3f4f6;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}</code></pre>
+            </div>
+
+            <div id="code-readme" class="space-y-2 hidden">
+                <div class="text-xs font-mono text-gray-400 flex justify-between items-center">
+                    <span>README.md</span>
+                    <button onclick="copyCode('readme-content')" class="text-brand-cyan hover:underline text-[11px]">Copy Code</button>
+                </div>
+                <pre class="bg-dark-800 p-4 rounded-xl text-xs font-mono text-gray-200 overflow-x-auto border border-white/5"><code id="readme-content"># NEXORA — Modern 3D Technology Agency
+
+## Deployment Steps
+1. Clone this repository or copy files into your project directory.
+2. Run `npm install` to install dependencies.
+3. Run `npm run dev` to launch local developer preview.
+4. Deploy to Vercel via CLI (`vercel`) or continuous integration on GitHub.</code></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT APP LOGIC & THREE.JS ENGINE -->
+    <script>
+        
+        // -------------------------------------------------------------
+        // 1. THREE.JS 3D SCENE & HERO ENGINE
+        // -------------------------------------------------------------
+        let scene, camera, renderer, centralMesh, particleSystem;
+        let mouseX = 0, mouseY = 0;
+        let targetX = 0, targetY = 0;
+
+        function initThreeHero() {
+            const container = document.getElementById('hero-3d-container');
+            const fallback = document.getElementById('hero-fallback');
+
+            if (!container) return;
+
+            try {
+                // Scene setup
+                scene = new THREE.Scene();
+
+                // Camera setup
+                camera = new THREE.PerspectiveCamera(60, container.clientWidth / container.clientHeight, 0.1, 1000);
+                camera.position.z = 7;
+
+                // Renderer setup
+                renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                renderer.setSize(container.clientWidth, container.clientHeight);
+                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                container.appendChild(renderer.domElement);
+
+                // Central Object: Torus Knot Geometry
+                const geometry = new THREE.TorusKnotGeometry(1.6, 0.45, 120, 16);
+                const material = new THREE.MeshStandardMaterial({
+                    color: 0x6366f1,
+                    roughness: 0.2,
+                    metalness: 0.8,
+                    wireframe: true,
+                    emissive: 0x06b6d4,
+                    emissiveIntensity: 0.25
+                });
+                centralMesh = new THREE.Mesh(geometry, material);
+                scene.add(centralMesh);
+
+                // Custom Particle Starfield
+                const particleCount = 250;
+                const particleGeo = new THREE.BufferGeometry();
+                const particleCoords = new Float32Array(particleCount * 3);
+
+                for (let i = 0; i < particleCount * 3; i++) {
+                    particleCoords[i] = (Math.random() - 0.5) * 18;
+                }
+                particleGeo.setAttribute('position', new THREE.BufferAttribute(particleCoords, 3));
+
+                const particleMat = new THREE.PointsMaterial({
+                    size: 0.05,
+                    color: 0x06b6d4,
+                    transparent: true,
+                    opacity: 0.8
+                });
+                particleSystem = new THREE.Points(particleGeo, particleMat);
+                scene.add(particleSystem);
+
+                // Lighting
+                const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+                scene.add(ambientLight);
+
+                const pointLight1 = new THREE.PointLight(0x06b6d4, 2, 50);
+                pointLight1.position.set(5, 5, 5);
+                scene.add(pointLight1);
+
+                const pointLight2 = new THREE.PointLight(0xa855f7, 2, 50);
+                pointLight2.position.set(-5, -5, -5);
+                scene.add(pointLight2);
+
+                // Event Listeners for Parallax & Resize
+                window.addEventListener('mousemove', onMouseMove);
+                window.addEventListener('resize', onWindowResize);
+
+                // Start Animation Loop
+                animateThree();
+
+            } catch (err) {
+                console.warn('WebGL initialization failed, switching to CSS fallback:', err);
+                if (container) container.style.display = 'none';
+                if (fallback) fallback.classList.remove('hidden');
+            }
+        }
+
+        function onMouseMove(event) {
+            mouseX = (event.clientX - window.innerWidth / 2) * 0.001;
+            mouseY = (event.clientY - window.innerHeight / 2) * 0.001;
+        }
+
+        function onWindowResize() {
+            const container = document.getElementById('hero-3d-container');
+            if (!container || !renderer || !camera) return;
+
+            camera.aspect = container.clientWidth / container.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(container.clientWidth, container.clientHeight);
+        }
+
+        function animateThree() {
+            requestAnimationFrame(animateThree);
+
+            // Smooth Lerp Camera Parallax
+            targetX += (mouseX - targetX) * 0.05;
+            targetY += (mouseY - targetY) * 0.05;
+
+            camera.position.x = targetX * 3;
+            camera.position.y = -targetY * 3;
+            camera.lookAt(scene.position);
+
+            // Central Mesh Rotation
+            if (centralMesh) {
+                centralMesh.rotation.x += 0.005;
+                centralMesh.rotation.y += 0.008;
+            }
+
+            // Particle drift
+            if (particleSystem) {
+                particleSystem.rotation.y += 0.001;
+            }
+
+            renderer.render(scene, camera);
+        }
+
+
+        // -------------------------------------------------------------
+        // 2. ABOUT MINI CANVAS (2D Animated Geometry)
+        // -------------------------------------------------------------
+        function initAboutMiniCanvas() {
+            const canvas = document.getElementById('about-mini-canvas');
+            if (!canvas) return;
+
+            const ctx = canvas.getContext('2d');
+            let angle = 0;
+
+            function resize() {
+                canvas.width = canvas.parentElement.clientWidth;
+                canvas.height = canvas.parentElement.clientHeight;
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                const centerX = canvas.width / 2;
+                const centerY = canvas.height / 2;
+                const size = 35;
+
+                ctx.save();
+                ctx.translate(centerX, centerY);
+                ctx.rotate(angle);
+
+                // Inner pulsing square
+                ctx.strokeStyle = '#06b6d4';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(-size, -size, size * 2, size * 2);
+
+                // Outer rotating square
+                ctx.rotate(-angle * 2);
+                ctx.strokeStyle = '#818cf8';
+                ctx.strokeRect(-size * 1.3, -size * 1.3, size * 2.6, size * 2.6);
+
+                ctx.restore();
+
+                angle += 0.02;
+                requestAnimationFrame(draw);
+            }
+            draw();
+        }
+
+        // -------------------------------------------------------------
+        // 3. SHOWCASE PARTICLE FIELD CANVAS
+        // -------------------------------------------------------------
+        function initShowcaseCanvas() {
+            const canvas = document.getElementById('showcase-canvas');
+            if (!canvas) return;
+
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            let cursor = { x: -1000, y: -1000 };
+
+            function resize() {
+                canvas.width = canvas.parentElement.clientWidth;
+                canvas.height = canvas.parentElement.clientHeight;
+                createParticles();
+            }
+
+            function createParticles() {
+                particles = [];
+                const count = Math.floor(canvas.width / 15);
+                for (let i = 0; i < count; i++) {
+                    particles.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height,
+                        vx: (Math.random() - 0.5) * 1.5,
+                        vy: (Math.random() - 0.5) * 1.5,
+                        radius: Math.random() * 2 + 1,
+                        color: i % 2 === 0 ? '#06b6d4' : '#a855f7'
+                    });
+                }
+            }
+
+            canvas.addEventListener('mousemove', (e) => {
+                const rect = canvas.getBoundingClientRect();
+                cursor.x = e.clientX - rect.left;
+                cursor.y = e.clientY - rect.top;
+            });
+
+            canvas.addEventListener('mouseleave', () => {
+                cursor.x = -1000;
+                cursor.y = -1000;
+            });
+
+            window.addEventListener('resize', resize);
+            resize();
+
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                for (let i = 0; i < particles.length; i++) {
+                    let p = particles[i];
+
+                    // Move particles
+                    p.x += p.vx;
+                    p.y += p.vy;
+
+                    if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                    if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+                    // Cursor attraction
+                    let dx = cursor.x - p.x;
+                    let dy = cursor.y - p.y;
+                    let dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 100) {
+                        p.x += dx * 0.03;
+                        p.y += dy * 0.03;
+                    }
+
+                    // Render particle
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = p.color;
+                    ctx.fill();
+
+                    // Draw connecting lines
+                    for (let j = i + 1; j < particles.length; j++) {
+                        let p2 = particles[j];
+                        let linkDx = p.x - p2.x;
+                        let linkDy = p.y - p2.y;
+                        let linkDist = Math.sqrt(linkDx * linkDx + linkDy * linkDy);
+
+                        if (linkDist < 80) {
+                            ctx.beginPath();
+                            ctx.moveTo(p.x, p.y);
+                            ctx.lineTo(p2.x, p2.y);
+                            ctx.strokeStyle = `rgba(99, 102, 241, ${1 - linkDist / 80})`;
+                            ctx.lineWidth = 0.5;
+                            ctx.stroke();
+                        }
+                    }
+                }
+
+                requestAnimationFrame(draw);
+            }
+            draw();
+        }
+
+        // -------------------------------------------------------------
+        // 4. PROJECT CARD CANVAS THUMBNAILS
+        // -------------------------------------------------------------
+        function initProjectCanvases() {
+            const configs = [
+                { id: 'proj-canvas-1', color: '#06b6d4', type: 'grid' },
+                { id: 'proj-canvas-2', color: '#6366f1', type: 'waves' },
+                { id: 'proj-canvas-3', color: '#a855f7', type: 'circles' },
+                { id: 'proj-canvas-4', color: '#34d399', type: 'grid' },
+                { id: 'proj-canvas-5', color: '#38bdf8', type: 'waves' },
+                { id: 'proj-canvas-6', color: '#f472b6', type: 'circles' },
+            ];
+
+            configs.forEach(cfg => {
+                const canvas = document.getElementById(cfg.id);
+                if (!canvas) return;
+
+                const ctx = canvas.getContext('2d');
+                let t = 0;
+
+                function resize() {
+                    canvas.width = canvas.parentElement.clientWidth;
+                    canvas.height = canvas.parentElement.clientHeight;
+                }
+                resize();
+
+                function render() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.fillStyle = '#0b0f19';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                    ctx.strokeStyle = cfg.color;
+                    ctx.lineWidth = 1;
+
+                    if (cfg.type === 'grid') {
+                        ctx.beginPath();
+                        for (let x = 0; x < canvas.width; x += 25) {
+                            ctx.moveTo(x, 0);
+                            ctx.lineTo(x + Math.sin(t + x) * 10, canvas.height);
+                        }
+                        ctx.stroke();
+                    } else if (cfg.type === 'waves') {
+                        ctx.beginPath();
+                        for (let y = 0; y < canvas.height; y += 20) {
+                            ctx.moveTo(0, y);
+                            for (let x = 0; x < canvas.width; x += 10) {
+                                ctx.lineTo(x, y + Math.sin(t + x * 0.05) * 8);
+                            }
+                        }
+                        ctx.stroke();
+                    } else if (cfg.type === 'circles') {
+                        const centerX = canvas.width / 2;
+                        const centerY = canvas.height / 2;
+                        for (let r = 10; r < 90; r += 15) {
+                            ctx.beginPath();
+                            ctx.arc(centerX, centerY, r + Math.sin(t) * 5, 0, Math.PI * 2);
+                            ctx.stroke();
+                        }
+                    }
+
+                    t += 0.03;
+                    requestAnimationFrame(render);
+                }
+                render();
+            });
+        }
+
+
+        // -------------------------------------------------------------
+        // 5. ANIMATED STATS COUNTER
+        // -------------------------------------------------------------
+        function animateStats() {
+            const targets = [
+                { id: 'stat-1', target: 50, suffix: '+' },
+                { id: 'stat-2', target: 30, suffix: '+' },
+                { id: 'stat-3', target: 5, suffix: '+' }
+            ];
+
+            targets.forEach(item => {
+                const el = document.getElementById(item.id);
+                if (!el) return;
+
+                let current = 0;
+                const increment = Math.ceil(item.target / 30);
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= item.target) {
+                        current = item.target;
+                        clearInterval(timer);
+                    }
+                    el.innerText = current + item.suffix;
+                }, 40);
+            });
+        }
+
+        // -------------------------------------------------------------
+        // 6. PROJECT CATEGORY FILTERING
+        // -------------------------------------------------------------
+        function filterProjects(category) {
+            const cards = document.querySelectorAll('.project-card');
+            const filterBtns = document.querySelectorAll('.filter-btn');
+
+            filterBtns.forEach(btn => {
+                if (btn.getAttribute('data-filter') === category) {
+                    btn.classList.add('bg-brand-indigo', 'text-white');
+                    btn.classList.remove('glass-panel', 'text-gray-300');
+                } else {
+                    btn.classList.remove('bg-brand-indigo', 'text-white');
+                    btn.classList.add('glass-panel', 'text-gray-300');
+                }
+            });
+
+            cards.forEach(card => {
+                const cardCat = card.getAttribute('data-category');
+                if (category === 'all' || cardCat === category) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // -------------------------------------------------------------
+        // 7. MODAL CONTROLLERS & FORM HANDLING
+        // -------------------------------------------------------------
+        function openProjectModal(title, category, desc) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-badge').innerText = category;
+            document.getElementById('modal-desc').innerText = desc;
+            document.getElementById('project-modal').classList.remove('hidden');
+        }
+
+        function closeProjectModal() {
+            document.getElementById('project-modal').classList.add('hidden');
+        }
+
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            document.getElementById('contact-success-modal').classList.remove('hidden');
+            document.getElementById('contact-form').reset();
+        }
+
+        function closeContactModal() {
+            document.getElementById('contact-success-modal').classList.add('hidden');
+        }
+
+        // -------------------------------------------------------------
+        // 8. MOBILE MENU CONTROLLER
+        // -------------------------------------------------------------
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+            menu.classList.toggle('flex');
+        }
+
+        function closeMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.add('hidden');
+            menu.classList.remove('flex');
+        }
+
+        // -------------------------------------------------------------
+        // 9. DEVELOPER DEPLOYMENT DRAWER CONTROLLER
+        // -------------------------------------------------------------
+        function openDevDrawer() {
+            document.getElementById('dev-drawer').classList.remove('hidden');
+        }
+
+        function closeDevDrawer() {
+            document.getElementById('dev-drawer').classList.add('hidden');
+        }
+
+        function switchDevTab(tabKey) {
+            const keys = ['pkg', 'vite', 'app', 'css', 'readme'];
+            keys.forEach(k => {
+                const codeBlock = document.getElementById(`code-${k}`);
+                const tabBtn = document.getElementById(`tab-${k}`);
+                if (k === tabKey) {
+                    codeBlock.classList.remove('hidden');
+                    tabBtn.className = 'px-3 py-1.5 rounded-lg bg-brand-indigo text-white transition-colors';
+                } else {
+                    codeBlock.classList.add('hidden');
+                    tabBtn.className = 'px-3 py-1.5 rounded-lg glass-panel text-gray-300 hover:text-white transition-colors';
+                }
+            });
+        }
+
+        function copyCode(elementId) {
+            const text = document.getElementById(elementId).innerText;
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+
+            // Simple notification indicator
+            const btn = event.target;
+            const originalText = btn.innerText;
+            btn.innerText = 'Copied!';
+            setTimeout(() => {
+                btn.innerText = originalText;
+            }, 2000);
+        }
+
+        // -------------------------------------------------------------
+        // 10. INITIALIZATION ON WINDOW LOAD
+        // -------------------------------------------------------------
+        window.onload = function() {
+            initThreeHero();
+            initAboutMiniCanvas();
+            initShowcaseCanvas();
+            initProjectCanvases();
+            animateStats();
+        };
+    </script>
+</body>
+</html>
